@@ -1,21 +1,16 @@
 # coding: utf-8
 
+from importlib.abc import PathEntryFinder
 import requests
 from bs4 import BeautifulSoup
 import csv
 import pandas as pd
 import re
 
-def getIds(url):
-    page = requests.get(url)
-    soup = BeautifulSoup(page.content, 'html.parser')
-    elems = soup.find_all(class_="jimgbold")
-    elems = elems[3:len(elems)-1]
-    ids = []
-    for elem in elems:
-        id = re.sub(r"\D", "",elem.find('a').get('href'))
-        ids += [id]
-    return ids
+def getGameList(page):
+    url = "https://www.gamers-jp.com/playgame/db_lista.php?pageNum=" + page
+    df = pd.read_html(url)[11]
+    return df
 
 def getData1(id):
     url = "https://www.gamers-jp.com/playgame/db_gamea.php?game_id=" + id
@@ -34,8 +29,8 @@ def getReview(id):
     df = pd.read_html(url)[9]
     return df
 
-url = "https://www.gamers-jp.com/playgame/db_newsa.php?pageNum=0"
-print(getIds(url))
+page = "0"
+print(getGameList(page))
 
 id = "9614"
 print(getData1(id))

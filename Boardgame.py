@@ -7,10 +7,11 @@ import csv
 import pandas as pd
 import re
 
-def getGameList(page):
+def getGameList(page_num):
     url = "https://www.gamers-jp.com/playgame/db_lista.php?pageNum=" + page
     df = pd.read_html(url)[11]
-    return df
+    bg_list = df[2:len(df)][0].to_list()
+    return bg_list
 
 def getData1(id):
     url = "https://www.gamers-jp.com/playgame/db_gamea.php?game_id=" + id

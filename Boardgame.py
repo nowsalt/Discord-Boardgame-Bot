@@ -13,6 +13,12 @@ def getGameList(page_num):
     bg_list = df[2:len(df)][0].to_list()
     return bg_list
 
+def getGameTite(id):
+    url = "https://www.gamers-jp.com/playgame/db_gamec.php?game_id=" + id
+    df = pd.read_html(url)[2]
+    return df
+
+
 def getData1(id):
     url = "https://www.gamers-jp.com/playgame/db_gamea.php?game_id=" + id
     df1 = pd.read_html(url)[11]
@@ -34,6 +40,7 @@ page = "0"
 print(getGameList(page))
 
 id = "9614"
+print(getGameTite(id))
 print(getData1(id))
 print(getData2(id))
 print(getReview(id))

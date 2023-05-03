@@ -46,9 +46,9 @@ class BoardGame:
 		df.reset_index(drop=True,inplace=True)
 		match = df[df[1]==text]
 		if(len(match.index)):
-			print(match.values.tolist()[0][1])	
+			return match.values.tolist()[0][1]	
 		else:
-			print(df.iat[1,1])
+			return df.iat[1,1]
 
 
 	def getGameList(page_num):

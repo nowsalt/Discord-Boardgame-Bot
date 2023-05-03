@@ -1,6 +1,5 @@
 # coding: utf-8
 
-#from importlib.abc import PathEntryFinder
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -11,8 +10,7 @@ import re
 class BoardGame:
 
 	def getIdFromText(text):
-		url = "https://www.gamers-jp.com/playgame/db_searchlist.php?mode=1&order=1&search_flag=0&search_str=" + text + \
-		"&designer=0&maker=0&relyear=0&relyearb=0&player=%E6%9C%AA%E9%81%B8%E6%8A%9E&playerb=0&Submit=+++%E9%80%81%E4%BF%A1+++"
+		url = "https://www.gamers-jp.com/playgame/db_searchlist.php?mode=1&order=1&search_flag=0&search_str=" + text + "&designer=0&maker=0&relyear=0&relyearb=0&player=%E6%9C%AA%E9%81%B8%E6%8A%9E&playerb=0&Submit=+++%E9%80%81%E4%BF%A1+++"
 		response = requests.get(url)
 		url = response.url
 		id = "https://www.gamers-jp.com/playgame/db_gamea.php?game_id="
@@ -23,9 +21,14 @@ class BoardGame:
 			df = pd.read_html(website, encoding="UTF-8")[9]
 		except IndexError as ie:
 			return None
-		print(df)
-		id = df.iat[3, 0]
-		return id
+		df.drop([0,1],axis=0,inplace=True)
+		df.dropna(inplace=True)
+		df.reset_index(drop=True,inplace=True)
+		match = df[df[1]==text]
+		if(len(match.index)):
+			return match.values.tolist()[0][0]	
+		else:
+			return df.iat[1,0]
 
 
 	def getNameFromText(text):
@@ -38,8 +41,14 @@ class BoardGame:
 			df = pd.read_html(website, encoding="UTF-8")[9]
 		except IndexError as ie:
 			return None
-		name = df.iat[3, 1]
-		return name
+		df.drop([0,1],axis=0,inplace=True)
+		df.dropna(inplace=True)
+		df.reset_index(drop=True,inplace=True)
+		match = df[df[1]==text]
+		if(len(match.index)):
+			print(match.values.tolist()[0][1])	
+		else:
+			print(df.iat[1,1])
 
 
 	def getGameList(page_num):

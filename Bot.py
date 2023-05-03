@@ -19,6 +19,7 @@ async def on_message(message):
 	id = "<@1002461482132455464>"
 	content = message.content
 	text = re.sub(id, '', content)
+	text = text.lstrip()
 	if  (id in message.content) & (not len(text) == 0):
 		bg = Boardgame.BoardGame
 		id = bg.getIdFromText(text)
@@ -30,6 +31,6 @@ async def on_message(message):
 			await message.channel.send(data1)
 			await message.channel.send(data2)
 		else:
-			await message.channel.send("データが存在しません")
+			await message.channel.send("データが存在しません。")
 
 client.run(TOKEN)

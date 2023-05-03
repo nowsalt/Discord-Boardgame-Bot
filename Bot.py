@@ -1,9 +1,12 @@
 import discord
 import Boardgame
 import re
+import yaml
 from tabulate import tabulate
 
-TOKEN = ''
+with open('token.yml', 'r') as yml:
+    config = yaml.safe_load(yml)
+TOKEN = config['token']
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)

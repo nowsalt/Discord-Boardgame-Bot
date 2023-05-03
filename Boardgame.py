@@ -14,9 +14,16 @@ class BoardGame:
 		url = "https://www.gamers-jp.com/playgame/db_searchlist.php?mode=1&order=1&search_flag=0&search_str=" + text + \
 		"&designer=0&maker=0&relyear=0&relyearb=0&player=%E6%9C%AA%E9%81%B8%E6%8A%9E&playerb=0&Submit=+++%E9%80%81%E4%BF%A1+++"
 		response = requests.get(url)
+		url = response.url
+		id = "https://www.gamers-jp.com/playgame/db_gamea.php?game_id="
+		if(id in url): return int(url.strip(id))
 		response.encoding = response.apparent_encoding
 		website = response.text
-		df = pd.read_html(website, encoding="UTF-8")[9]
+		try:
+			df = pd.read_html(website, encoding="UTF-8")[9]
+		except IndexError as ie:
+			return None
+		print(df)
 		id = df.iat[3, 0]
 		return id
 
@@ -27,7 +34,10 @@ class BoardGame:
 		response = requests.get(url)
 		response.encoding = response.apparent_encoding
 		website = response.text
-		df = pd.read_html(website, encoding="UTF-8")[9]
+		try:
+			df = pd.read_html(website, encoding="UTF-8")[9]
+		except IndexError as ie:
+			return None
 		name = df.iat[3, 1]
 		return name
 
@@ -46,9 +56,9 @@ class BoardGame:
 		return last_page
 
 
-	def getGameTite(id):
+	def getGameTitle(id):
 		url = "https://www.gamers-jp.com/playgame/db_gamec.php?game_id=" + str(id)
-		df = pd.read_html(url)[2]
+		df = pd.read_html(url)[2].iat[0,0]
 		return df
 
 
